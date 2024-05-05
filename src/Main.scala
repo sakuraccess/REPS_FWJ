@@ -12,7 +12,7 @@ object Main {
       option = scala.io.StdIn.readLine() // 从用户终端获取输入
 
       if (option == "1") {
-        // 处理选项1的逻辑
+        
       } else if (option == "2") {
         // 处理选项2的逻辑
       } else if (option == "3") {
