@@ -1,14 +1,15 @@
 object Main {
   import scala.io.StdIn.readLine
-  import scala.io.Source
+//  import scala.io.Source
 
   def main(args: Array[String]): Unit = {
     println("Welcome to the Renewable Energy Plant System!")
-    var option: String = ""
-    
     apiDataFetching.fetchData()
-    
-    val data = CSVconvertMatrix.csvToMatrix("C:/Users/86138/Desktop/DMM2/wind.csv")
+
+    val windData = CSVconvertMatrix.csvToMatrix("wind_data_output.csv")
+    val pvData = CSVconvertMatrix.csvToMatrix("pv_data_output.csv")
+
+    var option: String = ""
     while (option != "4") {
       println("\nPlease choose an option:")
       println("1: Generate the graph for dataset")
@@ -21,22 +22,22 @@ object Main {
 
       option match {
         case "1" => generateGraph()
-        case "2" => analyzeData()
-        case "3" => detectErrors()
+        case "2" => analyzeData(windData)
+        case "3" => detectErrors(windData)
         case "4" => println("Exiting system...")
         case _ => println("Invalid option. Please enter a number between 1 and 4.")
       }
     }
   }
 
-  def generateGraph(): Unit = {
+  private def generateGraph(): Unit = {
     println("Generating graph for the dataset...")
     // Placeholder for graph generation logic
   }
 
-  def analyzeData(): Unit = {
+  private def analyzeData(data: List[List[String]]): Unit = {
     println("Analyzing data...")
-    val data = CSVconvertMatrix.csvToMatrix("C:/Users/86138/Desktop/DMM2/wind.csv")
+//    val data = CSVconvertMatrix.csvToMatrix("wind.csv")
     println("Choose the time frame for analysis:\n1. Hourly\n2. Daily\n3. Weekly\n4. Monthly")
     val timeFrame = readLine()
 
@@ -66,9 +67,9 @@ object Main {
     println(result)
   }
 
-  def detectErrors(): Unit = {
+  private def detectErrors(data: List[List[String]]): Unit = {
     println("Detecting errors in the data...")
-    val data = CSVconvertMatrix.csvToMatrix("C:/Users/86138/Desktop/DMM2/wind.csv")
+//    val data = CSVconvertMatrix.csvToMatrix("wind.csv")
     println("Choose the time frame for error detection:\n1. Hourly\n2. Daily\n3. Weekly\n4. Monthly")
     val timeFrame = readLine()
 
@@ -87,6 +88,6 @@ object Main {
     val avgValue = analysis.average(selectedData)
     val error = avgValue - minValue
 
-    println(s"Error detection: Minimal value is $minValue, you should add ${error} power at that time.")
+    println(s"Error detection: Minimal value is $minValue, you should add $error power at that time.")
   }
 }
