@@ -4,22 +4,20 @@ import scala.util.Try
 object DataFilter {
   def extractDateTimeAndPower(data: List[List[String]]): List[(String, Double)] = {
     data.flatMap {
-      case row@List(startTime, _, powerGeneration) =>
-        println(s"Trying to parse row: $row")  // Log the row to be parsed
-        Try(powerGeneration.toDouble).toOption match {
+      case List(startTime, _, powerGeneration) =>
+        val cleanPowerGeneration = powerGeneration.replace("\"", "") // Remove double quotes
+        Try(cleanPowerGeneration.toDouble).toOption match {
           case Some(pg) =>
-            println(s"Parsed: ($startTime, $pg)")
             Some((startTime, pg))
           case None =>
-            println(s"Failed to parse power generation value: $powerGeneration")
+            println(s"Failed to parse cleaned power generation value from: '$cleanPowerGeneration'")
             None
         }
-      case row =>
-        println(s"Unmatched data format: $row")
-        None  // Log and ignore rows that do not match the expected format
+      case _ =>
+        println("Warning: Data format does not match expected pattern")
+        None
     }
   }
-
   def datahour(data: List[List[String]]): List[(String, Double)] = {
     val dateTimePower = extractDateTimeAndPower(data)
     val groupedData = dateTimePower.grouped(4).toList.filter(_.nonEmpty)
