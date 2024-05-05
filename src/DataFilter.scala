@@ -1,38 +1,33 @@
-class DataFilter {
-  def extractSolarData(data: List[List[String]]): List[Double] = {
-    data.map { case List(_, _, powerGeneration) =>
-      if (powerGeneration == "0") 0.0
-      else powerGeneration.toDouble
-    }
+def extractDateTimeAndPower(data: List[List[String]]): List[(String, Double)] = {
+  data.map { case List(startTime, _, powerGeneration) =>
+    (startTime, if (powerGeneration == "0") 0.0 else powerGeneration.toDouble)
   }
-
-  def datahour(data: List[List[String]]): List[Double] = {
-    val solarData = extractSolarData(data)
-    solarData.grouped(4).toList.map(hourlyData =>
-      if (hourlyData.nonEmpty) hourlyData.sum / hourlyData.size else 0
-    )
+}
+def datahour(data: List[List[String]]): List[(String, Double)] = {
+  val dateTimePower = extractDateTimeAndPower(data)
+  dateTimePower.grouped(4).toList.map { hourlyData =>
+    val averagePower = if (hourlyData.nonEmpty) hourlyData.map(_._2).sum / hourlyData.size else 0
+    (hourlyData.head._1, averagePower)
   }
-
-  def dataday(data: List[List[String]]): List[Double] = {
-    val solarData = extractSolarData(data)
-    solarData.grouped(4 * 24).toList.map(dailyData =>
-      if (dailyData.nonEmpty) dailyData.sum / dailyData.size else 0
-    )
+}
+def dataday(data: List[List[String]]): List[(String, Double)] = {
+  val dateTimePower = extractDateTimeAndPower(data)
+  dateTimePower.grouped(96).toList.map { dailyData =>
+    val averagePower = if (dailyData.nonEmpty) dailyData.map(_._2).sum / dailyData.size else 0
+    (dailyData.head._1, averagePower)
   }
-
-  def dataweek(data: List[List[String]]): List[Double] = {
-    val solarData = extractSolarData(data)
-    solarData.grouped(4 * 24 * 7).toList.map(weeklyData =>
-      if (weeklyData.nonEmpty) weeklyData.sum / weeklyData.size else 0
-    )
+}
+def dataweek(data: List[List[String]]): List[(String, Double)] = {
+  val dateTimePower = extractDateTimeAndPower(data)
+  dateTimePower.grouped(672).toList.map { weeklyData =>
+    val averagePower = if (weeklyData.nonEmpty) weeklyData.map(_._2).sum / weeklyData.size else 0
+    (weeklyData.head._1, averagePower)
   }
-
-  def datamonth(data: List[List[String]]): List[Double] = {
-    val solarData = extractSolarData(data)
-    // Assuming each month approximately as 30 days
-    solarData.grouped(4 * 24 * 30).toList.map(monthlyData =>
-      if (monthlyData.nonEmpty) monthlyData.sum / monthlyData.size else 0
-    )
+}
+def datamonth(data: List[List[String]]): List[(String, Double)] = {
+  val dateTimePower = extractDateTimeAndPower(data)
+  dateTimePower.grouped(2880).toList.map { monthlyData =>
+    val averagePower = if (monthlyData.nonEmpty) monthlyData.map(_._2).sum / monthlyData.size else 0
+    (monthlyData.head._1, averagePower)
   }
-
 }
