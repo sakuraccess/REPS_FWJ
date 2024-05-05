@@ -5,6 +5,9 @@ object Main {
   def main(args: Array[String]): Unit = {
     println("Welcome to the Renewable Energy Plant System!")
     var option: String = ""
+    
+    apiDataFetching.fetchData()
+    
     val data = CSVconvertMatrix.csvToMatrix("C:/Users/86138/Desktop/DMM2/wind.csv")
     while (option != "4") {
       println("\nPlease choose an option:")
