@@ -5,6 +5,8 @@ object Main {
     println("Welcome to renewable energy plant system!")
     var option: String = ""
 
+    apiDataFetching.fetchData()
+
     while (option != "4") {
       println("Option 1: generate the graph for dataset")
       println("Option 2: analysis the data")
