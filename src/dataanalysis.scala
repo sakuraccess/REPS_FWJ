@@ -25,6 +25,14 @@ class dataanalysis {
     }
   }
 
-  def midValue(data: List[(String, Double)]): Double = median(data)
+  def midValue(data: List[(String, Double)]): Double = {
+    if (data.isEmpty) {
+      0.0
+    } else {
+      val numericValues = data.map(_._2)
+      (numericValues.max + numericValues.min) / 2
+    }
+  }
+
 
 }
